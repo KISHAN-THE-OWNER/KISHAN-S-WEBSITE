@@ -16,7 +16,7 @@
   --bg-card: #1e2235;   /* cards = same bg, raised by shadows */
 
   /* Neumorphic shadows */
-  --neu-out:    6px 6px 14px #131624, -6px -6px 14px #292e47;
+  --neu-out:    8px 8px 18px #0f1220, -6px -6px 14px #292e47;
   --neu-out-sm: 3px 3px 7px  #131624, -3px -3px 7px  #292e47;
   --neu-in:     inset 4px 4px 10px #131624, inset -4px -4px 10px #292e47;
   --neu-in-sm:  inset 2px 2px 6px  #131624, inset -2px -2px 6px  #292e47;
@@ -932,11 +932,16 @@ addEventListener('resize',()=>{resizeBg();initBgP();});
 resizeBg();initBgP();drawBg();
 
 /* ══ SCROLL REVEAL ══ */
-const rv=document.querySelectorAll('.reveal');
-new IntersectionObserver((es)=>{
-  es.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*70);} });
-},{threshold:.1,rootMargin:'0px 0px -50px 0px'}).observe&&rv.forEach(r=>new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');}});},{threshold:.1}).observe(r));
-
+const rv = document.querySelectorAll('.reveal');
+const revealObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObs.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+rv.forEach(r => revealObs.observe(r));
 /* ══ WHITE PAPER MODAL ══ */
 function openPaper(){document.getElementById('paper-modal').classList.add('open');document.body.style.overflow='hidden';}
 function closePaper(){document.getElementById('paper-modal').classList.remove('open');document.body.style.overflow='';}
