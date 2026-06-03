@@ -8,11 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
 <style>
-/* ━━━ DESIGN TOKENS — Neumorphism ━━━ */
+/* ━━━ DESIGN TOKENS — Dark Neumorphism ━━━ */
 :root {
-  --bg:      #d8d5d0;   /* base surface */
-  --bg-dark: #161928;   /* shadow dark side */
-  --bg-lite: #262d44;   /* shadow light side */
+  --bg:      #1e2235;   /* base surface — dark navy-slate */
+  --bg-dark: #0f1220;   /* shadow dark side */
+  --bg-lite: #292e47;   /* shadow light side */
   --bg-card: #1e2235;   /* cards = same bg, raised by shadows */
 
   /* Neumorphic shadows */
@@ -51,14 +51,22 @@ body {
   font-size: 15px;
   line-height: 1.65;
   overflow-x: hidden;
+  min-height: 100vh;
 }
 
-/* subtle noise */
+/* global focus ring */
+*:focus-visible {
+  outline: 2px solid rgba(74,124,246,0.55);
+  outline-offset: 3px;
+  border-radius: var(--r4);
+}
+
+/* subtle noise overlay */
 body::after {
   content:'';
   position:fixed; inset:0;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-  pointer-events:none; z-index:999; opacity:.5;
+  pointer-events:none; z-index:999; opacity:.45;
 }
 
 #bg-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
@@ -68,8 +76,11 @@ nav {
   position:fixed; top:0; left:0; right:0; z-index:200;
   height:60px; padding:0 48px;
   display:flex; align-items:center; justify-content:space-between;
-  background: var(--bg);
-  box-shadow: 0 2px 0 #131624, 0 -1px 0 #292e47;
+  background: rgba(30,34,53,0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
 }
 .nav-logo {
   font-family:var(--mono); font-size:11px; letter-spacing:3px;
@@ -88,9 +99,14 @@ nav {
   color:var(--gold); text-decoration:none; text-transform:uppercase;
   padding:9px 18px; border-radius:var(--r8);
   background:var(--bg); box-shadow:var(--neu-out-sm);
-  transition:all .2s;
+  transition:all .2s; cursor:pointer;
+  border: 1px solid rgba(232,168,64,0.1);
 }
-.nav-cta:hover { box-shadow:var(--neu-in-sm); color:var(--gold-lite); }
+.nav-cta:hover {
+  box-shadow:var(--neu-in-sm), 0 0 14px var(--gold-glow);
+  color:var(--gold-lite);
+  border-color:rgba(232,168,64,0.2);
+}
 
 /* ━━━ HERO ━━━ */
 #hero {
@@ -141,6 +157,7 @@ nav {
   background:var(--bg); border-radius:var(--r8); color:var(--gold);
   box-shadow:var(--neu-out); border:1px solid rgba(232,168,64,.12);
   transition:all .2s; cursor:pointer; font-weight:600;
+  display:inline-flex; align-items:center; gap:8px;
 }
 .btn-gold:hover {
   box-shadow:var(--neu-in), 0 0 20px var(--gold-glow);
@@ -152,6 +169,7 @@ nav {
   background:var(--bg); border-radius:var(--r8); color:var(--blue-lite);
   box-shadow:var(--neu-out); border:1px solid rgba(74,124,246,.12);
   transition:all .2s; cursor:pointer;
+  display:inline-flex; align-items:center; gap:8px;
 }
 .btn-blue:hover {
   box-shadow:var(--neu-in), 0 0 20px var(--blue-glow);
@@ -161,10 +179,10 @@ nav {
   font-family:var(--mono); font-size:10px; letter-spacing:2px;
   text-transform:uppercase; text-decoration:none; padding:13px 26px;
   background:transparent; border-radius:var(--r8); color:var(--text2);
-  box-shadow:var(--neu-out); border:none;
+  box-shadow:var(--neu-out); border:1px solid rgba(255,255,255,.04);
   transition:all .2s; cursor:pointer;
 }
-.btn-ghost:hover { box-shadow:var(--neu-in); color:var(--text); }
+.btn-ghost:hover { box-shadow:var(--neu-in); color:var(--text); border-color:rgba(255,255,255,.08); }
 
 .hero-scroll {
   position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
@@ -207,12 +225,14 @@ nav {
 .neu-card {
   background:var(--bg); border-radius:var(--r16);
   box-shadow:var(--neu-out); padding:28px;
+  border:1px solid rgba(255,255,255,0.04);
   transition:box-shadow .25s;
 }
 .neu-card:hover { box-shadow:var(--neu-out), 0 0 0 1px rgba(74,124,246,.12); }
 .neu-card-inset {
   background:var(--bg); border-radius:var(--r12);
   box-shadow:var(--neu-in); padding:20px;
+  border:1px solid rgba(0,0,0,0.2);
 }
 
 /* ━━━ DOSSIER ━━━ */
@@ -223,6 +243,7 @@ nav {
 .dossier-photo-card {
   background:var(--bg); border-radius:var(--r16);
   box-shadow:var(--neu-out); overflow:hidden;
+  border:1px solid rgba(255,255,255,0.04);
 }
 .dossier-photo-head {
   padding:14px 18px; display:flex; align-items:center; justify-content:space-between;
@@ -257,7 +278,7 @@ nav {
 }
 .photo-vignette {
   position:absolute; inset:0;
-  background:radial-gradient(ellipse at center,transparent 45%,rgba(30,34,53,.65) 100%);
+  background:radial-gradient(ellipse at center,transparent 45%,rgba(15,18,32,.7) 100%);
 }
 @keyframes scanAnim { 0%{transform:translateY(-100%)} 100%{transform:translateY(100%)} }
 .dossier-photo-foot {
@@ -282,6 +303,7 @@ nav {
 .dossier-field {
   background:var(--bg); border-radius:var(--r8);
   box-shadow:var(--neu-in-sm); padding:13px 15px;
+  border:1px solid rgba(0,0,0,0.15);
 }
 .dossier-field-label { font-family:var(--mono); font-size:7px; letter-spacing:2.5px; color:var(--text3); text-transform:uppercase; margin-bottom:5px; }
 .dossier-field-value { font-family:var(--mono); font-size:11px; color:var(--text); }
@@ -289,6 +311,9 @@ nav {
   background:var(--bg); border-radius:var(--r12);
   box-shadow:var(--neu-in); padding:22px;
   border-left:2px solid var(--gold);
+  border-top:1px solid rgba(0,0,0,0.15);
+  border-right:1px solid rgba(0,0,0,0.15);
+  border-bottom:1px solid rgba(0,0,0,0.15);
 }
 .dossier-bio-label { font-family:var(--mono); font-size:7px; letter-spacing:3px; color:var(--gold); text-transform:uppercase; margin-bottom:10px; }
 .dossier-bio-text { font-size:13px; color:var(--text2); line-height:1.85; }
@@ -297,6 +322,7 @@ nav {
   font-family:var(--mono); font-size:8px; letter-spacing:2px;
   text-transform:uppercase; padding:6px 12px; border-radius:var(--r4);
   background:var(--bg); box-shadow:var(--neu-out-sm);
+  border:1px solid rgba(255,255,255,0.04);
 }
 .tag-blue { color:var(--blue-lite); }
 .tag-gold { color:var(--gold); }
@@ -309,7 +335,7 @@ nav {
 #paper-modal {
   position:fixed; inset:0; z-index:500;
   display:flex; align-items:center; justify-content:center;
-  background:rgba(14,16,25,.85); backdrop-filter:blur(8px);
+  background:rgba(10,12,20,.88); backdrop-filter:blur(10px);
   opacity:0; pointer-events:none; transition:opacity .3s;
 }
 #paper-modal.open { opacity:1; pointer-events:all; }
@@ -404,25 +430,28 @@ nav {
 .map-wrap {
   background:var(--bg); border-radius:var(--r16);
   box-shadow:var(--neu-out); overflow:hidden;
+  border:1px solid rgba(255,255,255,0.04);
 }
 .map-controls {
   padding:14px 20px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;
-  border-bottom:1px solid rgba(255,255,255,.04); background:rgba(0,0,0,.1);
+  border-bottom:1px solid rgba(255,255,255,.04); background:rgba(0,0,0,.15);
 }
 .map-btn {
   font-family:var(--mono); font-size:8px; letter-spacing:2px; text-transform:uppercase;
   padding:8px 14px; border-radius:var(--r8); border:none; cursor:pointer;
   background:var(--bg); box-shadow:var(--neu-out-sm); color:var(--text2);
+  border:1px solid rgba(255,255,255,0.03);
   transition:all .2s;
 }
 .map-btn.active, .map-btn:hover {
   box-shadow:var(--neu-in-sm); color:var(--blue-lite);
+  border-color:rgba(74,124,246,0.15);
 }
 .map-status-label { font-family:var(--mono); font-size:8px; letter-spacing:1px; color:var(--text3); margin-left:auto; }
 #attraction-canvas { width:100%; height:580px; display:block; cursor:crosshair; }
 .map-legend {
   padding:14px 20px; display:flex; gap:20px; flex-wrap:wrap;
-  border-top:1px solid rgba(255,255,255,.04); background:rgba(0,0,0,.1);
+  border-top:1px solid rgba(255,255,255,.04); background:rgba(0,0,0,.15);
 }
 .leg { display:flex; align-items:center; gap:7px; font-family:var(--mono); font-size:8px; letter-spacing:1px; color:var(--text2); text-transform:uppercase; }
 .leg-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
@@ -459,11 +488,12 @@ nav {
   display:flex; align-items:center; justify-content:space-between;
   padding:15px 18px; border-radius:var(--r8);
   background:var(--bg); box-shadow:var(--neu-out-sm);
-  text-decoration:none; transition:all .2s;
+  border:1px solid rgba(255,255,255,0.04);
+  text-decoration:none; transition:all .2s; cursor:pointer;
 }
-.buy-opt:hover { box-shadow:var(--neu-in-sm), 0 0 16px var(--gold-glow); }
+.buy-opt:hover { box-shadow:var(--neu-in-sm), 0 0 16px var(--gold-glow); border-color:rgba(232,168,64,0.12); }
 .buy-opt-l { display:flex; align-items:center; gap:12px; }
-.buy-opt-icon { font-size:18px; }
+.buy-opt-icon { color:var(--text3); flex-shrink:0; display:flex; align-items:center; }
 .buy-opt-title { font-weight:600; font-size:13px; color:var(--text); display:block; }
 .buy-opt-sub { font-family:var(--mono); font-size:9px; color:var(--text3); display:block; margin-top:2px; }
 .buy-opt-price { font-family:var(--mono); font-size:17px; font-weight:600; color:var(--gold); }
@@ -475,15 +505,17 @@ nav {
 .blog-card {
   background:var(--bg); border-radius:var(--r12);
   box-shadow:var(--neu-out-sm); padding:24px;
+  border:1px solid rgba(255,255,255,0.04);
   text-decoration:none; display:flex; flex-direction:column; gap:14px;
-  transition:box-shadow .25s;
+  transition:box-shadow .25s, border-color .25s; cursor:pointer;
 }
-.blog-card:hover { box-shadow:var(--neu-in-sm), 0 0 20px var(--blue-glow); }
+.blog-card:hover { box-shadow:var(--neu-in-sm), 0 0 20px var(--blue-glow); border-color:rgba(74,124,246,0.12); }
 .blog-tag {
   font-family:var(--mono); font-size:7px; letter-spacing:2.5px;
   color:var(--blue-lite); text-transform:uppercase;
   background:var(--bg); box-shadow:var(--neu-in-sm);
   padding:5px 10px; border-radius:var(--r4); display:inline-block;
+  border:1px solid rgba(0,0,0,0.15);
 }
 .blog-title { font-size:15px; font-weight:600; color:var(--text); line-height:1.4; }
 .blog-desc { font-size:12px; color:var(--text2); line-height:1.75; flex:1; }
@@ -501,38 +533,42 @@ nav {
 .contact-form {
   background:var(--bg); border-radius:var(--r16);
   box-shadow:var(--neu-out); padding:36px; text-align:left;
+  border:1px solid rgba(255,255,255,0.04);
 }
 .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
 .form-group { display:flex; flex-direction:column; gap:7px; margin-bottom:14px; }
 .form-lbl { font-family:var(--mono); font-size:7px; letter-spacing:2.5px; color:var(--text3); text-transform:uppercase; }
 .form-input,.form-textarea {
-  background:var(--bg); border:none; border-radius:var(--r8);
+  background:var(--bg); border:1px solid rgba(0,0,0,0.2); border-radius:var(--r8);
   box-shadow:var(--neu-in); padding:12px 15px;
   color:var(--text); font-family:var(--mono); font-size:12px; outline:none;
-  transition:box-shadow .2s;
+  transition:box-shadow .2s, border-color .2s;
 }
 .form-input:focus,.form-textarea:focus {
-  box-shadow:var(--neu-in), 0 0 0 2px rgba(74,124,246,.18);
+  box-shadow:var(--neu-in), 0 0 0 2px rgba(74,124,246,.2);
+  border-color:rgba(74,124,246,.25);
 }
 .form-input::placeholder,.form-textarea::placeholder { color:var(--text3); }
 .form-textarea { resize:vertical; min-height:100px; }
 .form-submit {
-  width:100%; padding:14px; border:none; border-radius:var(--r8);
+  width:100%; padding:14px; border:1px solid rgba(74,124,246,.12); border-radius:var(--r8);
   background:var(--bg); box-shadow:var(--neu-out);
   color:var(--blue-lite); font-family:var(--mono);
   font-size:10px; letter-spacing:3px; text-transform:uppercase;
   cursor:pointer; margin-top:6px; transition:all .2s;
 }
-.form-submit:hover { box-shadow:var(--neu-in), 0 0 20px var(--blue-glow); }
+.form-submit:hover { box-shadow:var(--neu-in), 0 0 20px var(--blue-glow); border-color:rgba(74,124,246,.25); }
 .contact-links { display:flex; gap:12px; justify-content:center; margin-top:24px; flex-wrap:wrap; }
 .contact-link {
   display:flex; align-items:center; gap:8px;
   font-family:var(--mono); font-size:9px; letter-spacing:1px;
   color:var(--text2); text-decoration:none; padding:10px 16px;
   border-radius:var(--r8); background:var(--bg); box-shadow:var(--neu-out-sm);
-  transition:all .2s;
+  border:1px solid rgba(255,255,255,0.04);
+  transition:all .2s; cursor:pointer;
 }
-.contact-link:hover { box-shadow:var(--neu-in-sm); color:var(--text); }
+.contact-link:hover { box-shadow:var(--neu-in-sm); color:var(--text); border-color:rgba(255,255,255,.08); }
+.contact-link svg { flex-shrink:0; }
 
 /* ━━━ FOOTER ━━━ */
 footer {
@@ -555,7 +591,16 @@ footer {
 @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
 /* ━━━ SCROLLBAR ━━━ */
-::-webkit-scrollbar{width:4px} ::-webkit-scrollbar-track{background:var(--bg)} ::-webkit-scrollbar-thumb{background:var(--text3);border-radius:2px}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--text3);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--text2)}
+
+/* ━━━ REDUCED MOTION ━━━ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration:.01ms !important; transition-duration:.01ms !important; }
+  html { scroll-behavior:auto; }
+}
 
 /* ━━━ MOBILE ━━━ */
 @media(max-width:768px){
@@ -665,8 +710,9 @@ footer {
       </div>
       <!-- ABOUT AUTHOR BUTTON -->
       <div class="about-btn-wrap reveal">
-        <button class="btn-gold" onclick="openPaper()" style="display:inline-flex;align-items:center;gap:10px">
-          <span>📄</span> Read Full Author File
+        <button class="btn-gold" onclick="openPaper()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          Read Full Author File
         </button>
       </div>
     </div>
@@ -813,15 +859,30 @@ making excuses and start making decisions.</pre>
       </div>
       <div class="buy-opts reveal">
         <a href="https://www.amazon.in/OWNER-I-CHOOSE-YOU-ebook/dp/B0FH76N1KV" target="_blank" class="buy-opt">
-          <div class="buy-opt-l"><span class="buy-opt-icon">📱</span><div><span class="buy-opt-title">Kindle Edition</span><span class="buy-opt-sub">Instant digital access · Amazon India</span></div></div>
+          <div class="buy-opt-l">
+            <span class="buy-opt-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            </span>
+            <div><span class="buy-opt-title">Kindle Edition</span><span class="buy-opt-sub">Instant digital access · Amazon India</span></div>
+          </div>
           <span class="buy-opt-price">₹429</span>
         </a>
         <a href="https://www.amazon.in/OWNER-I-CHOOSE-YOU-ebook/dp/B0FH76N1KV" target="_blank" class="buy-opt" style="opacity:.55">
-          <div class="buy-opt-l"><span class="buy-opt-icon">📚</span><div><span class="buy-opt-title">Paperback</span><span class="buy-opt-sub">Coming soon · Pre-order on Amazon</span></div></div>
+          <div class="buy-opt-l">
+            <span class="buy-opt-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </span>
+            <div><span class="buy-opt-title">Paperback</span><span class="buy-opt-sub">Coming soon · Pre-order on Amazon</span></div>
+          </div>
           <span class="buy-opt-price" style="font-size:11px;color:var(--text3)">Soon</span>
         </a>
         <a href="https://kishantheowner.com/free-chapter" class="buy-opt">
-          <div class="buy-opt-l"><span class="buy-opt-icon">🔓</span><div><span class="buy-opt-title">Free Chapter</span><span class="buy-opt-sub">Read before you decide</span></div></div>
+          <div class="buy-opt-l">
+            <span class="buy-opt-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+            </span>
+            <div><span class="buy-opt-title">Free Chapter</span><span class="buy-opt-sub">Read before you decide</span></div>
+          </div>
           <span class="buy-opt-price" style="font-size:12px;color:var(--green)">Free</span>
         </a>
       </div>
@@ -896,9 +957,18 @@ making excuses and start making decisions.</pre>
     <button class="form-submit">Send Message</button>
   </div>
   <div class="contact-links">
-    <a href="https://instagram.com/kishan_the_owner" target="_blank" class="contact-link">📸 @kishan_the_owner</a>
-    <a href="mailto:Contact.da.owner@gmail.com" class="contact-link">✉️ Contact.da.owner@gmail.com</a>
-    <a href="https://www.amazon.in/OWNER-I-CHOOSE-YOU-ebook/dp/B0FH76N1KV" target="_blank" class="contact-link">📦 Amazon</a>
+    <a href="https://instagram.com/kishan_the_owner" target="_blank" class="contact-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      @kishan_the_owner
+    </a>
+    <a href="mailto:Contact.da.owner@gmail.com" class="contact-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Contact.da.owner@gmail.com
+    </a>
+    <a href="https://www.amazon.in/OWNER-I-CHOOSE-YOU-ebook/dp/B0FH76N1KV" target="_blank" class="contact-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      Amazon
+    </a>
   </div>
 </section>
 
